@@ -30,7 +30,7 @@ function App() {
         })}
       </select>
       {
-        <Suspense fallback={<div>Loading&ellip;</div>}>
+        <Suspense fallback={<div>Loading&hellip;</div>}>
           <Exercise />
         </Suspense>
       }
