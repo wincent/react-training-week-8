@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, lazy, useState } from "react";
+
+const Exercises = {
+  useIsMounted: lazy(() => import("./exercises/useIsMounted/Exercise")),
+  usePrevious: lazy(() => import("./exercises/usePrevious/Exercise")),
+  functionalComponent: lazy(() =>
+    import("./exercises/functionalComponent/Exercise")
+  ),
+  errorBoundary: lazy(() => import("./exercises/errorBoundary/Exercise"))
+};
 
 function App() {
+  const [activeExercise, setActiveExercise] = useState("useIsMounted");
+
+  const Exercise = Exercises[activeExercise];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Exercises</h1>
+      <select
+        onChange={event => setActiveExercise(event.target.value)}
+        value={activeExercise}
+      >
+        {Object.keys(Exercises).map(name => {
+          return (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          );
+        })}
+      </select>
+      {
+        <Suspense fallback={<div>Loading&ellip;</div>}>
+          <Exercise />
+        </Suspense>
+      }
     </div>
   );
 }
