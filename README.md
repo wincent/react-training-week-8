@@ -5,3 +5,7 @@ yarn start
 ```
 
 App is now running at [http://localhost:3000](http://localhost:3000).
+
+# See also
+
+- Solutions can be seen on [the `solutions` branch](https://github.com/wincent/react-training-week-8/commits/solutions).
