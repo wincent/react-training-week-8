@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 export default function Exercise() {
   return (
@@ -17,40 +17,40 @@ export default function Exercise() {
   );
 }
 
-class Component extends React.Component {
-  constructor(props) {
-    super(props);
-    this.messages = [];
-  }
+function Component() {
+  const mounting = useRef(true);
+  const messages = useRef([]);
 
-  componentDidMount() {
-    this.messages.push("mounted");
-  }
+  const [, setUpdate] = useState(0);
 
-  componentDidUpdate(prevProps, prevState) {
-    this.messages.push("updated");
-  }
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (mounting.current) {
+      messages.current.push('mounted');
+      mounting.current = false;
+      setUpdate(x => x + 1);
+    } else {
+      messages.current.push('updated');
+    }
 
-  componentWillUnmount() {
-    // We won't actually get to see this one, but including it for completeness.
-    this.messages.push("unmounting");
-  }
+    return () => {
+      // Note: With hooks, we can't distinguish between really unmounting and
+      // just tearing-down and re-running during an update.
+      messages.current.push('unmounted');
+    };
+  });
 
-  render() {
-    this.messages.push("rendered");
+  messages.current.push('rendered');
 
-    const messages = this.messages;
-
-    return (
-      <div>
-        I use "lifecycle hooks" under the covers.
-        <ul>
-          {messages.map((message, i) => {
-            return <li key={i}>{message}</li>;
-          })}
-        </ul>
-        <button onClick={() => this.forceUpdate()}>Refresh</button>
-      </div>
-    );
-  }
+  return (
+    <div>
+      I use "hooks" under the covers.
+      <ul>
+        {messages.current.map((message, i) => {
+          return <li key={i}>{message}</li>;
+        })}
+      </ul>
+      <button onClick={() => setUpdate(x => x + 1)}>Refresh</button>
+    </div>
+  );
 }

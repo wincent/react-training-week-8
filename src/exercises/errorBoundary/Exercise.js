@@ -26,10 +26,41 @@ export default function Exercise() {
   );
 }
 
-// TODO: actually implement this class
+// NOTE: To actually see this working, you have to use a production build.
+// ie. instead of:
+//
+//      yarn start
+//
+// do:
+//
+//      yarn build
+//      npx serve -s build
+//
 class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hasError: false,
+      error: null
+    };
+  }
+
+  static getDerivedStateFromError(error) {
+    return {error, hasError: true};
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Could do something like log to remote service here.
+    console.log(error, errorInfo);
+  }
+
   render() {
-    return this.props.children;
+    if (this.state.hasError) {
+      return <p>Got an error: {this.state.error.toString()}</p>;
+    } else {
+      return this.props.children;
+    }
   }
 }
 

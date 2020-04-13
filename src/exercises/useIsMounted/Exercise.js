@@ -65,7 +65,7 @@ function Child() {
         setBackgroundColor("#eee");
       }
     }, 5000);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div
